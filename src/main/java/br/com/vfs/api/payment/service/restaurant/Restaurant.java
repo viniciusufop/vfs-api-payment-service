@@ -39,4 +39,8 @@ public class Restaurant {
         this.name = name;
         this.paymentMethods = paymentMethods;
     }
+
+    public boolean accepted(final PaymentMethod paymentMethod) {
+        return paymentMethods.contains(paymentMethod);
+    }
 }

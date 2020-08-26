@@ -9,4 +9,8 @@ public enum PaymentMethodType {
 
     @Getter
     private final boolean online;
+
+    public boolean isOffline(){
+        return !online;
+    }
 }
