@@ -1,5 +1,6 @@
 package br.com.vfs.api.payment.service.paymentmethod;
 
+import br.com.vfs.api.payment.service.user.User;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -12,6 +13,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -34,6 +36,7 @@ public class PaymentMethod implements Serializable {
     @Enumerated(EnumType.STRING)
     @Column
     private CreditCardType creditCardType;
+
 
     public PaymentMethod(@NotBlank final String name, @NotBlank final String description,
                          @NotNull final PaymentMethodType type) {
