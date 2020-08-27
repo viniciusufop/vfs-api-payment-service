@@ -61,4 +61,8 @@ public class Transaction {
         this.status = status;
         this.paymentMethod = paymentMethod;
     }
+
+    public Transaction toConfirm() {
+        return new Transaction(orderId, value, user, restaurant, TransactionStatus.CONFIRM, paymentMethod);
+    }
 }

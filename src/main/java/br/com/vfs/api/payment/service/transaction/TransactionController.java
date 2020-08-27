@@ -12,9 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 
-import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.HttpStatus.CREATED;
 
 @RestController
 @RequestMapping("/api/transactions")
@@ -25,6 +26,7 @@ public class TransactionController {
     private final RestaurantRepository restaurantRepository;
     private final PaymentMethodRepository paymentMethodRepository;
     private final OrderIntegration orderIntegration;
+    private final TransactionRepository transactionRepository;
 
     @InitBinder("newOrder")
     public void init(final WebDataBinder dataBinder){
@@ -34,9 +36,10 @@ public class TransactionController {
     }
 
     @PostMapping
-    @ResponseStatus(OK)
+    @Transactional
+    @ResponseStatus(CREATED)
     public Long create(@RequestBody  @Valid final NewOrder newOrder) {
         final var transaction = newOrder.toTransaction(userRepository, restaurantRepository, orderIntegration);
-        return transaction.getId();
+        return transactionRepository.save(transaction).getId();
     }
 }
