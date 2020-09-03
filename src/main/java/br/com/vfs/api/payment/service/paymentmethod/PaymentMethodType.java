@@ -13,4 +13,8 @@ public enum PaymentMethodType {
     public boolean isOffline(){
         return !online;
     }
+
+    public boolean notIsCreditCard(){
+        return this != CARD;
+    }
 }

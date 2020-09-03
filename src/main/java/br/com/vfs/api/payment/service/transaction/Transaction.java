@@ -19,6 +19,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PastOrPresent;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.Set;
 
 @Data
@@ -49,7 +50,7 @@ public class Transaction {
     @ManyToOne
     private PaymentMethod paymentMethod;
     @ElementCollection
-    private Set<String> paymentInformation;
+    private Map<String, String> paymentInformation;
 
     public Transaction(@NotNull Long orderId, @NotNull BigDecimal value, @NotNull User user,
                        @NotNull Restaurant restaurant, @NotNull TransactionStatus status,
@@ -64,5 +65,9 @@ public class Transaction {
 
     public Transaction toConfirm() {
         return new Transaction(orderId, value, user, restaurant, TransactionStatus.CONFIRM, paymentMethod);
+    }
+
+    public boolean isCancel(){
+        return status == TransactionStatus.CANCEL;
     }
 }
