@@ -30,7 +30,6 @@ public class TransactionController {
 
     @InitBinder("newOrder")
     public void init(final WebDataBinder dataBinder){
-        dataBinder.addValidators(new ExistOrderValidator(orderIntegration));
         dataBinder.addValidators(new PaymentOfflineValidator(paymentMethodRepository));
         dataBinder.addValidators(new PaymentValidByUserAndRestaurantValidator(userRepository, restaurantRepository));
     }

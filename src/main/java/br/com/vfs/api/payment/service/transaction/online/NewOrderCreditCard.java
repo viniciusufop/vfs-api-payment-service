@@ -4,6 +4,7 @@ import br.com.vfs.api.payment.service.paymentmethod.PaymentMethod;
 import br.com.vfs.api.payment.service.restaurant.Restaurant;
 import br.com.vfs.api.payment.service.restaurant.RestaurantRepository;
 import br.com.vfs.api.payment.service.shared.annotations.ExistElement;
+import br.com.vfs.api.payment.service.shared.annotations.ExistOrder;
 import br.com.vfs.api.payment.service.transaction.OrderIntegration;
 import br.com.vfs.api.payment.service.transaction.Transaction;
 import br.com.vfs.api.payment.service.transaction.TransactionStatus;
@@ -14,6 +15,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.CreditCardNumber;
 
 import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.HashMap;
@@ -24,6 +26,7 @@ import java.util.Map;
 public class NewOrderCreditCard implements Serializable {
 
     @NotNull
+    @ExistOrder
     private Long orderId;
     @ExistElement(domainClass = PaymentMethod.class)
     @NotNull
@@ -37,6 +40,8 @@ public class NewOrderCreditCard implements Serializable {
     @CreditCardNumber
     @NotNull
     private String cardNumber;
+
+    @Min(100)
     @Max(999)
     @NotNull
     private Integer ccv;

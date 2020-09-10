@@ -1,4 +1,4 @@
-package br.com.vfs.api.payment.service.transaction.online;
+package br.com.vfs.api.payment.service.gateways;
 
 import br.com.vfs.api.payment.service.gateways.Gateway;
 import br.com.vfs.api.payment.service.gateways.GatewayCalculate;
@@ -19,21 +19,24 @@ import static br.com.vfs.api.payment.service.transaction.TransactionStatus.CONFI
 @RequiredArgsConstructor
 public class PaymentGateway {
 
-    private final List<Gateway> gateways;
+    private final List<Gateway> gateways; // 1
+
     public Transaction execute(final Transaction transaction){
         //calculate order gateway's
-        List<GatewayCalculate> gatewayCalculates = gateways.stream()
-                .map(gateway -> gateway.calculate(new GatewayInformation(transaction.getValue(), CreditCardType.MASTER)))
-                .filter(GatewayCalculate::isAccept)
-                .sorted(new GatewayComparator())
-                .collect(Collectors.toList());
-
-        for (GatewayCalculate gatewayCalculate: gatewayCalculates){
-            if(gatewayCalculate.getGateway().pay(transaction)){
+        final var gatewayCalculates = gateways.stream()
+                .map(gateway ->
+                        gateway.calculate(new GatewayInformation(transaction.getValue(),
+                                CreditCardType.MASTER))) //2
+                .filter(GatewayCalculate::isAccept) // 1
+                .sorted(new GatewayComparator()) // 1
+                .collect(Collectors.toList()); // 1
+        //execute pay by calculate order
+        for (GatewayCalculate gatewayCalculate: gatewayCalculates){ // 1
+            if(gatewayCalculate.getGateway().pay(transaction)){ // 1
                 transaction.setStatus(CONFIRM);
                 break;
             }
         }
-        return transaction;
+        return transaction; // 1
     }
 }

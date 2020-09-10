@@ -1,26 +1,45 @@
 package br.com.vfs.api.payment.service.gateways;
 
+import br.com.vfs.api.payment.service.gateways.request.TangoRequest;
+import br.com.vfs.api.payment.service.transaction.Order;
 import br.com.vfs.api.payment.service.transaction.Transaction;
+import br.com.vfs.api.payment.service.transaction.TransactionStatus;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
+@Slf4j
 @Service
 public class GatewayTango implements Gateway{
 
-    private final static BigDecimal delimiter = new BigDecimal("100.00");
-    private final static BigDecimal fix = new BigDecimal("4.00");
+    private static final BigDecimal delimiter = new BigDecimal("100.00");
+    private static final BigDecimal fix = new BigDecimal("4.00");
     private static final BigDecimal percents = new BigDecimal("0.05");
     @Override
-    public GatewayCalculate calculate(GatewayInformation information) {
-        //todo nao estou tratando localidade
+    public GatewayCalculate calculate(final GatewayInformation information) {
         final var rate = rate(information);
         return new GatewayCalculate(rate, true, this);
     }
 
     @Override
-    public boolean pay(Transaction transaction) {
+    public boolean pay(final Transaction transaction) {
+        final var request = new TangoRequest(transaction);
+        final var url = "http://localhost:8080/tango/processa";
+        final var restTemplate = new RestTemplate();
+        try {
+            ResponseEntity<Void> response = restTemplate.postForEntity(url, request, Void.class);
+            if(response.getStatusCode().is2xxSuccessful()){
+                return true;
+            }
+        } catch (HttpServerErrorException | HttpClientErrorException e) {
+            log.warn("M=pay, connector error from tango gateway");
+        }
         return false;
     }
 
