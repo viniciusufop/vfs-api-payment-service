@@ -2,7 +2,6 @@ package br.com.vfs.api.payment.service.gateways;
 
 import br.com.vfs.api.payment.service.gateways.request.SeyaCardRequest;
 import br.com.vfs.api.payment.service.gateways.request.SeyaPurchaseRequest;
-import br.com.vfs.api.payment.service.gateways.request.TangoRequest;
 import br.com.vfs.api.payment.service.transaction.Transaction;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +18,6 @@ import java.util.Optional;
 public class GatewaySeya implements Gateway{
     @Override
     public GatewayCalculate calculate(GatewayInformation information) {
-        //todo nao estou tratando localidade
         return new GatewayCalculate(new BigDecimal("6.00"), true, this);
     }
 

@@ -1,7 +1,6 @@
 package br.com.vfs.api.payment.service.gateways;
 
 import br.com.vfs.api.payment.service.gateways.request.SaoriRequest;
-import br.com.vfs.api.payment.service.gateways.request.TangoRequest;
 import br.com.vfs.api.payment.service.paymentmethod.CreditCardType;
 import br.com.vfs.api.payment.service.transaction.Transaction;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +23,6 @@ public class GatewaySaori implements Gateway{
 
     @Override
     public GatewayCalculate calculate(GatewayInformation information) {
-        //todo nao estou tratando localidade
         if (!acceptCreditCardTypes.contains(information.getCreditCardType()))
             return new GatewayCalculate(BigDecimal.ZERO, false, this);
         final var rate = information.getValue().multiply(percents).setScale(2, RoundingMode.DOWN);

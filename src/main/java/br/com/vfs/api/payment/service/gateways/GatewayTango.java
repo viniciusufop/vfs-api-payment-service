@@ -1,9 +1,7 @@
 package br.com.vfs.api.payment.service.gateways;
 
 import br.com.vfs.api.payment.service.gateways.request.TangoRequest;
-import br.com.vfs.api.payment.service.transaction.Order;
 import br.com.vfs.api.payment.service.transaction.Transaction;
-import br.com.vfs.api.payment.service.transaction.TransactionStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
